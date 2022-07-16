@@ -1,4 +1,5 @@
-const inq = require("inquirer");
+// import inq from 'inquirer';
+const inq = require('inquirer');
 const { listenerCount } = require("process");
 
 const addEngineer = () => {
@@ -32,34 +33,34 @@ const addEngineer = () => {
 };
 
 const addIntern = () => {
-    inq
-      .prompt([
-        {
-          message: "What is the inter's name?",
-          type: "input",
-          name: "firstName",
-        },
-        {
-          message: "What is the inter's employee ID?",
-          type: "input",
-          name: "employeeId",
-        },
-        {
-          message: "What is the inter's email address?",
-          type: "input",
-          name: "email",
-        },
-        {
-          message: "What is the inter's GitHub?",
-          type: "input",
-          name: "githubUsername",
-        },
-      ])
-      .then((answers) => {
-        //Make Engineer class from answers
-        promptForNextEmployee();
-      });
-  };
+  inq
+    .prompt([
+      {
+        message: "What is the intern's name?",
+        type: "input",
+        name: "firstName",
+      },
+      {
+        message: "What is the intern's employee ID?",
+        type: "input",
+        name: "employeeId",
+      },
+      {
+        message: "What is the intern's email address?",
+        type: "input",
+        name: "email",
+      },
+      {
+        message: "What is the intern's school?",
+        type: "input",
+        name: "school",
+      },
+    ])
+    .then((answers) => {
+      //Make Intern class from answers
+      promptForNextEmployee();
+    });
+};
 
 const promptForNextEmployee = () => {
   inq
@@ -74,11 +75,13 @@ const promptForNextEmployee = () => {
     .then((answers) => {
       switch (answers.nextOperation) {
         case "Intern": {
-            addIntern();
+          // Add Intern
+          addIntern();
           break;
         }
         case "Engineer": {
-            addEngineer();
+          // Add Engineer
+          addEngineer();
           break;
         }
         case "Done": {
