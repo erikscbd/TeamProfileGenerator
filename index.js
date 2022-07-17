@@ -34,6 +34,7 @@ const addEngineer = () => {
     .then((answers) => {
       //Make Engineer class from answers
       const engineer = new Engineer(answers.firstName, answers.employeeId, answers.email, answers.githubUsername);
+      employees.push(engineer);
       promptForNextEmployee();
     });
 };
@@ -65,6 +66,7 @@ const addIntern = () => {
     .then((answers) => {
       //Make Intern class from answers
       const intern = new Intern(answers.firstName, answers.employeeId, answers.email, answers.school);
+      employees.push(intern);
       promptForNextEmployee();
     });
 }
@@ -129,7 +131,7 @@ const promptForNextEmployee = () => {
             ${htmlBody}
             </body>
             </html>`
-            fs.writeFileSync("./output/team.html", html);
+            fs.writeFileSync("./index.html", html);
             console.log("Team generated!");
             break;
         }
@@ -162,6 +164,7 @@ const promptForNextEmployee = () => {
     .then((answers) => {
       //Make a manager using manager answers
         const manager = new Manager(answers.firstName, answers.employeeId, answers.email, answers.officeNumber);
+        employees.push(manager);
       promptForNextEmployee();
     });
 };
