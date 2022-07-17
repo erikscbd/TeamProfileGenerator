@@ -1,6 +1,11 @@
 // import inq from 'inquirer';
 const inq = require('inquirer');
-const { listenerCount } = require("process");
+const fs = require('fs');
+const Manager = require('./lib/Manager');
+const Engineer = require('./lib/Engineer');
+const Intern = require('./lib/Intern');
+
+const employees = [];
 
 const addEngineer = () => {
   inq
@@ -28,6 +33,7 @@ const addEngineer = () => {
     ])
     .then((answers) => {
       //Make Engineer class from answers
+      const engineer = new Engineer(answers.firstName, answers.employeeId, answers.email, answers.githubUsername);
       promptForNextEmployee();
     });
 };
@@ -58,9 +64,30 @@ const addIntern = () => {
     ])
     .then((answers) => {
       //Make Intern class from answers
+      const intern = new Intern(answers.firstName, answers.employeeId, answers.email, answers.school);
       promptForNextEmployee();
     });
-};
+}
+
+const generateHTML = (employee) => {
+    let template = `
+    <div> 
+    <h2>${employees.getName()}</h2>
+    <div>role:${employees.getRole()}</div>
+    <div>ID:${employees.getId()}</div>
+    <div>Email:${employees.getEmail()}</div>`;
+
+const role = employees.getRole();
+if (role === "Manager") {
+  template += `<div>Office Number:${employees.getOfficeNumber()}</div>`
+} else if (role === "Engineer") {
+  template += `<div>GitHub:${employees.getGithub()}</div>`
+} else if (role === "Intern") {
+    template += `<div>School:${employees.getSchool()}</div>`
+}
+template += `</div>`;
+return template;
+}
 
 const promptForNextEmployee = () => {
   inq
@@ -74,21 +101,40 @@ const promptForNextEmployee = () => {
     ])
     .then((answers) => {
       switch (answers.nextOperation) {
-        case "Intern": {
+        case 'Intern': {
           // Add Intern
           addIntern();
           break;
         }
-        case "Engineer": {
+        case 'Engineer': {
           // Add Engineer
           addEngineer();
           break;
         }
         case "Done": {
-          break;
+         //Generate HTML
+            let htmlBody = "";
+            for(const employee of employees) {
+                htmlBody += generateHTML(employee);
+            }
+            const html = `<!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <meta http-equiv="X-UA-Compatible" content="ie=edge">
+                <title>Document</title>
+            </head>
+            <body>
+            ${htmlBody}
+            </body>
+            </html>`
+            fs.writeFileSync("./output/team.html", html);
+            console.log("Team generated!");
+            break;
         }
       }
-    });
+    })
 
   inq
     .prompt([
@@ -115,5 +161,7 @@ const promptForNextEmployee = () => {
     ])
     .then((answers) => {
       //Make a manager using manager answers
+        const manager = new Manager(answers.firstName, answers.employeeId, answers.email, answers.officeNumber);
+      promptForNextEmployee();
     });
 };
